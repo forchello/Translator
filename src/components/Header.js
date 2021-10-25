@@ -30,6 +30,7 @@ import {
   // setRecognResult,
   setMicroIsLoading,
 } from '../context/actions/MicroActions';
+
 //
 // --------------------- CONST SETUP ---------------------
 //
@@ -45,7 +46,7 @@ import CHANGE_ICO from '../assets/images/change.svg';
 
 // -------------------------------------------------------
 
-const Header = () => {
+const Header = ({navigation}) => {
   const {TargetLang, SourceLang} = useSelector(state => state.langReducer);
 
   // RecognResult should be below in {}
@@ -87,7 +88,7 @@ const Header = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            ToastAndroid.show('camera', ToastAndroid.SHORT);
+            navigation.navigate('CameraScreen');
           }}>
           <View style={styles.camera}>
             <CAMERA_ICO />
@@ -109,7 +110,7 @@ const Header = () => {
       </View>
       <View style={styles.langChange}>
         <View style={styles.from}>
-          <Text style={styles.fromText}> {TargetLang} </Text>
+          <Text style={styles.fromText}> {SourceLang} </Text>
         </View>
 
         <TouchableOpacity onPress={() => onPressHandler()}>
@@ -119,7 +120,7 @@ const Header = () => {
         </TouchableOpacity>
 
         <View style={styles.to}>
-          <Text style={styles.toText}> {SourceLang} </Text>
+          <Text style={styles.toText}> {TargetLang} </Text>
         </View>
       </View>
     </View>

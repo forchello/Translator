@@ -1,4 +1,4 @@
 export const InitialLanguage = {
-  TargetLang: 'english',
-  SourceLang: 'русский',
+  SourceLang: 'en',
+  TargetLang: 'ru',
 };

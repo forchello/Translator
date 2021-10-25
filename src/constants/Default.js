@@ -1,4 +1,4 @@
 export default {
   INPUT_TEXT: 'Type smth',
-  MAX_LENGTH: 200,
+  MAX_LENGTH: 500,
 };

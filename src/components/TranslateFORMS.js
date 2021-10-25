@@ -1,9 +1,16 @@
 // --------------------- REACT SETUP ---------------------
 //
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
-import {Text, TextInput, View, StyleSheet, ToastAndroid} from 'react-native';
+import {
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  ToastAndroid,
+  Keyboard,
+} from 'react-native';
 
 //
 // --------------------- REDUX SETUP ---------------------
@@ -11,16 +18,12 @@ import {Text, TextInput, View, StyleSheet, ToastAndroid} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {
-  setTargetText,
-  setSourceText,
-  setIsMaxLength,
-} from '../context/actions/TranslateActions';
+import {setIsMaxLength} from '../context/actions/TranslateActions';
 
 //
 // --------------------- CONST SETUP ---------------------
 //
-
+import NETWORK from '../constants/Network';
 import COLOR from '../constants/Colors';
 import SCREEN from '../constants/ScreenSize';
 import DEFAULT_TEXT from '../constants/Default';
@@ -28,12 +31,12 @@ import DEFAULT_TEXT from '../constants/Default';
 // -------------------------------------------------------
 
 const TranslateFORMS = () => {
-  const {TargetText, SourceText, IsMaxLength} = useSelector(
-    state => state.translateReducer,
-  );
+  const {TargetLang, SourceLang} = useSelector(state => state.langReducer);
+  const {IsMaxLength} = useSelector(state => state.translateReducer);
+
   const translateDispatch = useDispatch();
 
-  const maxLengthMessage = text => {
+  const checkMaxLength = text => {
     if (text.length === DEFAULT_TEXT.MAX_LENGTH) {
       translateDispatch(setIsMaxLength(true));
       ToastAndroid.show('max length', ToastAndroid.SHORT);
@@ -48,11 +51,59 @@ const TranslateFORMS = () => {
     }
   };
 
-  const ChangeTargetInputText = text => {
-    maxLengthMessage(text);
+  const [SOURCE_TEXT, setSOURCE_TEXT] = useState('');
+  const [TARGET_TEXT, setTARGET_TEXT] = useState('');
+
+  useEffect(() => {
+    console.log('INSIDE USEEFFECT');
+    const delayDebounceFn = setTimeout(() => {
+      console.log(SOURCE_TEXT);
+      if (SOURCE_TEXT !== '') {
+        FetchToTranslate(SOURCE_TEXT);
+      }
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  });
+
+  const FetchToTranslate = async text => {
+    try {
+      const translateData = JSON.stringify({
+        FromText: text,
+        FromLang: SourceLang,
+        ToLang: TargetLang,
+      });
+      const response = await fetch(
+        'http://' + NETWORK.IP + ':' + NETWORK.PORT + '/api/translate/',
+        // NETWORK.ADRESS + '/api/translate/',
+        {
+          method: 'post',
+          body: translateData,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const responceText = await response.text();
+      console.log(JSON.parse(responceText).translatedText);
+      setTARGET_TEXT(JSON.parse(responceText).translatedText);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const ChangeTargetInputText = async text => {
+    if (text === '') {
+      setTARGET_TEXT('');
+    }
+    setSOURCE_TEXT(text);
+
+    // const temp = await translate(SOURCE_TEXT, {
+    //   from: SourceLang,
+    //   to: TargetLang,
+    // });
+    checkMaxLength(text);
     console.log(text);
-    translateDispatch(setTargetText(text));
-    translateDispatch(setSourceText(text));
   };
 
   return (
@@ -63,7 +114,7 @@ const TranslateFORMS = () => {
             multiline
             keyboardType="default"
             style={styles.internalInputText}
-            onChangeText={val => ChangeTargetInputText(val)}
+            onChangeText={e => ChangeTargetInputText(e)}
             placeholder={DEFAULT_TEXT.INPUT_TEXT}
             selectionColor={COLOR.ActiveText}
             maxLength={DEFAULT_TEXT.MAX_LENGTH}
@@ -77,7 +128,7 @@ const TranslateFORMS = () => {
             minimumFontScale={0.5}
             allowFontScaling
             style={styles.internalText}>
-            {SourceText}
+            {TARGET_TEXT}
           </Text>
         </View>
       </View>
@@ -111,7 +162,6 @@ const styles = StyleSheet.create({
     margin: 10,
 
     // sizing
-    marginTop: SCREEN.HEIGHT / 60,
     height: SCREEN.HEIGHT / 2.5 - 20 - 10,
     width: SCREEN.WIDTH - 40,
 
