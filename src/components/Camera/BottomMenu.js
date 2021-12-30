@@ -1,18 +1,22 @@
 // --------------------- REACT SETUP ---------------------
 //
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   Text,
   View,
   StyleSheet,
-  Button,
   TouchableOpacity,
-  PermissionsAndroid,
-  //   ToastAndroid,
-  //   ActivityIndicator,
+  BackHandler,
 } from 'react-native';
+
+import changeNavigationBarColor, {
+  hideNavigationBar,
+  showNavigationBar,
+} from 'react-native-navigation-bar-color';
+
+import {CommonActions} from '@react-navigation/native';
 
 // --------------------- CONST SETUP ---------------------
 //
@@ -28,14 +32,13 @@ import BACK_ICO from '../../assets/images/back.svg';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {
+  setCameraState,
   setPictureIsTaked,
   setPictureURI,
 } from '../../context/actions/CameraActions';
 
 //
 // -------------------------------------------------------
-
-// const [tempURI, setTempURI] = useState('');
 
 const takePicture = async (camera, cameraDispatch) => {
   if (camera) {
@@ -47,17 +50,46 @@ const takePicture = async (camera, cameraDispatch) => {
 };
 
 const BottomMenu = ({navigation}) => {
-  const {PictureIsTaked, PictureURI} = useSelector(
+  useEffect(() => {
+    const backAction = () => {
+      cameraDispatch(setCameraState('on'));
+      navigation.navigate('HomeScreen');
+      changeNavigationBarColor(COLOR.ActiveText);
+      setTimeout(() => {
+        cameraDispatch(setCameraState('off'));
+      }, 1000);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const {CameraState, PictureIsTaked, PictureURI} = useSelector(
     state => state.cameraReducer,
   );
   const cameraDispatch = useDispatch();
+
+  if (CameraState === 'off') {
+    changeNavigationBarColor(COLOR.ExternalColor);
+  }
 
   return (
     <View style={styles.mainContainer}>
       <TouchableOpacity
         onPress={() => {
           if (!PictureIsTaked) {
+            cameraDispatch(setCameraState('on'));
             navigation.navigate('HomeScreen');
+            changeNavigationBarColor(COLOR.ActiveText);
+            setTimeout(() => {
+              cameraDispatch(setCameraState('off'));
+            }, 1000);
           }
           cameraDispatch(setPictureIsTaked(false));
         }}

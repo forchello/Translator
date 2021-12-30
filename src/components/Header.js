@@ -10,8 +10,10 @@ import {
   TouchableOpacity,
   ToastAndroid,
   ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 
+import VoiceButton from './VoiceControll';
 //
 // --------------------- LIBS SETUP ----------------------
 //
@@ -27,9 +29,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setTargetLang, setSourceLang} from '../context/actions/LanguageActions';
 
 import {
-  // setRecognResult,
-  setMicroIsLoading,
-} from '../context/actions/MicroActions';
+  setIsMaxLength,
+  setTargetText,
+  setSourceText,
+} from '../context/actions/TranslateActions';
 
 //
 // --------------------- CONST SETUP ---------------------
@@ -49,21 +52,7 @@ import CHANGE_ICO from '../assets/images/change.svg';
 const Header = ({navigation}) => {
   const {TargetLang, SourceLang} = useSelector(state => state.langReducer);
 
-  // RecognResult should be below in {}
-  const {MicroIsLoading} = useSelector(state => state.microReducer);
-
   const langDispatch = useDispatch();
-  const microDispatch = useDispatch();
-
-  const startRecording = async () => {
-    ToastAndroid.show('Unbutton pls', ToastAndroid.SHORT);
-    microDispatch(setMicroIsLoading(true));
-  };
-
-  const stopRecording = async () => {
-    ToastAndroid.show('Don`t work yet', ToastAndroid.SHORT);
-    microDispatch(setMicroIsLoading(false));
-  };
 
   const onPressHandler = () => {
     const temp = TargetLang;
@@ -71,6 +60,28 @@ const Header = ({navigation}) => {
     langDispatch(setSourceLang(temp));
   };
 
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Permission to use camera',
+          message: 'We need your permission to use your camera',
+          buttonPositive: 'Ok',
+          buttonNegative: 'Cancel',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log(granted);
+        navigation.navigate('CameraScreen');
+      } else {
+        console.log(granted);
+        navigation.navigate('CameraError');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.options}>
@@ -86,27 +97,12 @@ const Header = ({navigation}) => {
             <SAVED_ICO />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('CameraScreen');
-          }}>
+        <TouchableOpacity onPress={() => requestCameraPermission()}>
           <View style={styles.camera}>
             <CAMERA_ICO />
           </View>
         </TouchableOpacity>
-        {MicroIsLoading ? (
-          <TouchableOpacity onPress={() => stopRecording()}>
-            <View style={styles.micro}>
-              <ActivityIndicator size={24} color={COLOR.ActiveText} />
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => startRecording()}>
-            <View style={styles.micro}>
-              <MICRO_ICO />
-            </View>
-          </TouchableOpacity>
-        )}
+        <VoiceButton />
       </View>
       <View style={styles.langChange}>
         <View style={styles.from}>
@@ -134,8 +130,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 10,
     marginRight: 10,
-    height: SCREEN.HEIGHT / 6,
-    width: SCREEN.WIDTH - 20,
   },
   options: {
     flexDirection: 'row',
