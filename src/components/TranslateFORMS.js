@@ -142,7 +142,7 @@ const TranslateFORMS = () => {
 
   return (
     <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
-      <Modal
+      {/* <Modal
         animationType="fade"
         transparent={true}
         visible={MODAL_VISIBILITY}
@@ -182,11 +182,11 @@ const TranslateFORMS = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
       <View style={styles.externalContainer}>
         <View style={styles.internalContainer}>
           <TextInput
-            multiline
+            multiline={true}
             keyboardType="default"
             value={SourceText}
             style={styles.internalInputText}
@@ -234,20 +234,20 @@ const styles = StyleSheet.create({
     flex: 12,
     backgroundColor: COLOR.InternalColor,
     borderRadius: 20,
-
     margin: 10,
     // centering
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   internalInputText: {
     flex: 12,
     width: SCREEN.WIDTH - 30,
-
+    textAlignVertical: 'center',
     color: COLOR.ActiveText,
     fontFamily: 'SFUIText-Semibold',
     fontSize: 0.1 * SCREEN.WIDTH,
     textAlign: 'center',
+    // marginTop: '0%',
   },
   internalText: {
     color: COLOR.PassiveText,
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   modalCentered: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'cenr',
     width: ((SCREEN.WIDTH - 40) / 5) * 3 + 20,
   },
   modalContainer: {

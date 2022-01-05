@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   ToastAndroid,
+  SafeAreaView,
   Alert,
   //   ActivityIndicator,
 } from 'react-native';
@@ -70,30 +71,31 @@ const CameraErrorView = ({navigation, permission}) => {
   if (!permission) {
     return (
       <View style={error_styles.mainContainer}>
-        <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
-        <ChooseLang />
-        <View style={error_styles.preview} />
-        <View style={error_styles.icoContainer}>
-          <CAMERA_ICO />
-        </View>
-        <View style={error_styles.textsContainer}>
-          <Text style={error_styles.h1}> Camera not found </Text>
-          <Text style={error_styles.h2}>
-            Please make sure your camera is working properly and that you have
-            agreed to use the camera. If you still have an error, please contact
-            support
-          </Text>
-        </View>
-        <View style={error_styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={() => requestCameraPermission()}
-            activeOpacity={0.7}>
-            <View style={error_styles.button}>
-              <Text style={error_styles.buttonText}> Try again </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <BottomMenu navigation={navigation} />
+        <SafeAreaView style={{flex: 1}}>
+          <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
+          <ChooseLang />
+          <View style={error_styles.preview} />
+          <View style={error_styles.icoContainer}>
+            <CAMERA_ICO />
+          </View>
+          <View style={error_styles.textsContainer}>
+            <Text style={error_styles.h1}> Camera not found </Text>
+            <Text style={error_styles.h2}>
+              Please make sure your camera is working properly and that you have
+              agreed to use the camera. If you still have an error, please
+              contact support
+            </Text>
+          </View>
+          <View style={error_styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => requestCameraPermission()}
+              activeOpacity={0.7}>
+              <View style={error_styles.button}>
+                <Text style={error_styles.buttonText}> Try again </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
       </View>
     );
   }

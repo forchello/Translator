@@ -36,6 +36,7 @@ import COLOR from './src/constants/Colors';
 import SCREEN from './src/constants/ScreenSize';
 
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // ------------------------------
 // IGNORE REANIMATED 2 WARNING
@@ -52,9 +53,10 @@ const HomeScreen = ({navigation}) => {
         backgroundColor={'transparent'}
         barStyle={'light-content'}
       />
-      <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
-      <Header navigation={navigation} />
-      <TranslateFORMS />
+      <SafeAreaView style={{flex: 1}}>
+        <Header navigation={navigation} />
+        <TranslateFORMS />
+      </SafeAreaView>
     </View>
   );
 };
