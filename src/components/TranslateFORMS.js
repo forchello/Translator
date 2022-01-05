@@ -194,6 +194,7 @@ const TranslateFORMS = () => {
             placeholder={DEFAULT_TEXT.INPUT_TEXT}
             selectionColor={COLOR.ActiveText}
             maxLength={DEFAULT_TEXT.MAX_LENGTH}
+            textAlign={'center'}
           />
         </View>
       </View>
@@ -236,24 +237,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 10,
     // centering
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   internalInputText: {
     flex: 12,
     width: SCREEN.WIDTH - 30,
-    textAlignVertical: 'center',
     color: COLOR.ActiveText,
     fontFamily: 'SFUIText-Semibold',
     fontSize: 0.1 * SCREEN.WIDTH,
-    textAlign: 'center',
-    // marginTop: '0%',
   },
   internalText: {
     color: COLOR.PassiveText,
     fontFamily: 'SFUIText-Semibold',
     fontSize: 0.1 * SCREEN.WIDTH,
-    textAlign: 'center',
   },
   modalCentered: {
     justifyContent: 'center',
