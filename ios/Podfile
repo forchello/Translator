@@ -14,6 +14,11 @@ target 'Translator' do
 
   pod 'react-native-voice', :path => '../node_modules/@react-native-voice/voice'
 
+   pod 'react-native-camera', path: '../node_modules/react-native-camera', subspecs: [
+     'FaceDetectorMLKit',
+  #   'TextDetector'
+   ]
+
   target 'TranslatorTests' do
     inherit! :complete
     # Pods for testing

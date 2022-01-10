@@ -5,7 +5,7 @@ import {
   View,
   Text,
   LogBox,
-  Dimensions,
+  SafeAreaView,
 } from 'react-native';
 
 import Header from './Header';
@@ -22,9 +22,11 @@ const HomeLandscape = ({navigation}) => {
         backgroundColor={'transparent'}
         barStyle={'light-content'}
       />
-      <View style={styles.statusbar} />
-      <Header navigation={navigation} />
-      <TranslateLandscape />
+      <SafeAreaView style={{flex: 1}}>
+        <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
+        <Header navigation={navigation} />
+        <TranslateLandscape />
+      </SafeAreaView>
     </View>
   );
 };

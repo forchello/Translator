@@ -8,10 +8,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  PermissionsAndroid,
-  ToastAndroid,
   SafeAreaView,
-  Alert,
+  Platform,
   //   ActivityIndicator,
 } from 'react-native';
 
@@ -31,6 +29,9 @@ import CAMERA_ICO from '../../assets/images/camera-not-found.svg';
 import ChooseLang from './ChooseLang';
 import BottomMenu from './BottomMenu';
 
+import {camera_permission_android} from '../Requests/CameraRequest.android';
+import {camera_permission_ios} from '../Requests/CameraRequest.ios';
+
 // --------------------- REDUX SETUP ---------------------
 //
 
@@ -46,25 +47,17 @@ const CameraErrorView = ({navigation, permission}) => {
   const cameraDispatch = useDispatch();
 
   const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log(granted);
-        navigation.navigate('CameraScreen');
-      } else {
-        console.log(granted);
-        if (granted === 'never_ask_again') {
-          Alert.alert(
-            'Camera permission',
-            'Please, update your camera permission',
-            [{text: 'OK', style: 'destructive'}],
-          );
-        }
-      }
-    } catch (err) {
-      console.warn(err);
+    switch (Platform.OS) {
+      case 'android':
+        console.log('camera android');
+        camera_permission_android({navigation});
+        break;
+      case 'ios':
+        console.log('camera ios');
+        camera_permission_ios({navigation});
+        break;
+      default:
+        console.log('Your system is not supported');
     }
   };
 

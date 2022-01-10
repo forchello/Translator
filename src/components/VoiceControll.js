@@ -5,8 +5,8 @@ import {
   LogBox,
   TouchableOpacity,
   ActivityIndicator,
-  PermissionsAndroid,
   Button,
+  Platform,
 } from 'react-native';
 
 import Voice, {
@@ -14,6 +14,9 @@ import Voice, {
   SpeechResultsEvent,
   SpeechErrorEvent,
 } from '@react-native-voice/voice';
+
+import {micro_permission_android} from './Requests/MicroRequest.android';
+import {micro_permission_ios} from './Requests/MicroRequest.ios';
 
 // ----------------------------------------
 // REDUX
@@ -80,7 +83,7 @@ const Micro = () => {
   };
 
   const _startRecognizing = async () => {
-    if (await requestCameraPermission()) {
+    if (await requestMicroPermission()) {
       try {
         setMicroIsLoading(true);
         await Voice.start(SourceLang);
@@ -101,24 +104,15 @@ const Micro = () => {
     }
   };
 
-  const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        {
-          title: 'Permission to use audio',
-          message: 'We need your permission to use your micro',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        return true;
-      } else {
-        return false;
+  const requestMicroPermission = async () => {
+    switch (Platform.OS) {
+      case 'android':
+        return await micro_permission_android();
+      case 'ios': {
+        return await micro_permission_ios();
       }
-    } catch (err) {
-      console.warn(err);
+      default:
+        console.log('Your system is not supported');
     }
   };
 

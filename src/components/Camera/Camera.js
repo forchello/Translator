@@ -8,11 +8,7 @@ import {
   View,
   StyleSheet,
   ImageBackground,
-  TouchableOpacity,
-  PermissionsAndroid,
-  ToastAndroid,
-  StatusBar,
-  //   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
@@ -45,9 +41,7 @@ const Camera = ({navigation}) => {
   const {PictureIsTaked, PictureURI} = useSelector(
     state => state.cameraReducer,
   );
-  const cameraDispatch = useDispatch();
 
-  console.log('CAMERA');
   if (!PictureIsTaked) {
     return (
       <View style={styles.mainContainer}>
@@ -63,17 +57,15 @@ const Camera = ({navigation}) => {
           whiteBalance={'auto'}
           focusDepth={0}
           trackingEnabled
-          cameraViewDimensions={{width: SCREEN.WIDTH, height: SCREEN.HEIGHT}}
-          // onTextRecognized={({text}) => {
-          //   if ( state ) {
-          //     console.log(text);
-          //   }
-          // }}
+          captureAudio={false}
+          //cameraViewDimensions={{width: SCREEN.WIDTH, height: SCREEN.HEIGHT}}
         >
-          <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
-          <ChooseLang />
-          <View style={styles.freeContainer} />
-          <BottomMenu navigation={navigation} />
+          <SafeAreaView style={{flex: 1}}>
+            <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
+            <ChooseLang />
+            <View style={styles.freeContainer} />
+            <BottomMenu navigation={navigation} />
+          </SafeAreaView>
         </RNCamera>
       </View>
     );
@@ -87,10 +79,12 @@ const Camera = ({navigation}) => {
         source={{
           uri: PictureURI,
         }}>
-        <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
-        <ChooseLang />
-        <View style={styles.freeContainer} />
-        <BottomMenu navigation={navigation} />
+        <SafeAreaView style={{flex: 1}}>
+          <View style={{height: SCREEN.STATUS_BAR_HEIGHT}} />
+          <ChooseLang />
+          <View style={styles.freeContainer} />
+          <BottomMenu navigation={navigation} />
+        </SafeAreaView>
       </ImageBackground>
     </View>
   );

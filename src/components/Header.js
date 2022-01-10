@@ -3,22 +3,18 @@
 
 import React from 'react';
 
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ToastAndroid,
-  ActivityIndicator,
-  PermissionsAndroid,
-} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Platform} from 'react-native';
 
 import VoiceButton from './VoiceControll';
+
+import {camera_permission_android} from './Requests/CameraRequest.android';
+import {camera_permission_ios} from './Requests/CameraRequest.ios';
+
 //
 // --------------------- LIBS SETUP ----------------------
 //
 
-// import Voice from '@react-native-voice/voice';
+import Toast from 'react-native-simple-toast';
 
 //
 // --------------------- REDUX SETUP ---------------------
@@ -27,12 +23,6 @@ import VoiceButton from './VoiceControll';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {setTargetLang, setSourceLang} from '../context/actions/LanguageActions';
-
-import {
-  setIsMaxLength,
-  setTargetText,
-  setSourceText,
-} from '../context/actions/TranslateActions';
 
 //
 // --------------------- CONST SETUP ---------------------
@@ -44,7 +34,6 @@ import SCREEN from '../constants/ScreenSize';
 import BURGER_ICO from '../assets/images/burger.svg';
 import SAVED_ICO from '../assets/images/saved.svg';
 import CAMERA_ICO from '../assets/images/camera.svg';
-import MICRO_ICO from '../assets/images/micro.svg';
 import CHANGE_ICO from '../assets/images/change.svg';
 
 // -------------------------------------------------------
@@ -60,39 +49,34 @@ const Header = ({navigation}) => {
     langDispatch(setSourceLang(temp));
   };
 
-  const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log(granted);
-        navigation.navigate('CameraScreen');
-      } else {
-        console.log(granted);
-        navigation.navigate('CameraError');
-      }
-    } catch (err) {
-      console.warn(err);
+  // ----------------------------------------------------------------
+
+  const requestCameraPermission = () => {
+    switch (Platform.OS) {
+      case 'android':
+        console.log('camera android');
+        camera_permission_android({navigation});
+        break;
+      case 'ios':
+        console.log('camera ios');
+        camera_permission_ios({navigation});
+        break;
+      default:
+        console.log('Your system is not supported');
     }
   };
+
+  // ----------------------------------------------------------------
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.options}>
-        <TouchableOpacity
-          onPress={() => ToastAndroid.show('drawer', ToastAndroid.SHORT)}>
+        <TouchableOpacity onPress={() => Toast.show('drawer')}>
           <View style={styles.burger}>
             <BURGER_ICO />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => ToastAndroid.show('saved', ToastAndroid.SHORT)}>
+        <TouchableOpacity onPress={() => Toast.show('saved')}>
           <View style={styles.saved}>
             <SAVED_ICO />
           </View>

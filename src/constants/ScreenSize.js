@@ -8,7 +8,7 @@ export default {
 
   isPortrait() {
     const dim = Dimensions.get('screen');
-    return dim.width <= dim.height;
+    return dim.width < dim.height;
   },
 
   isLandscape() {

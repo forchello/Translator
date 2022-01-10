@@ -225,4 +225,10 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
+android {
+    defaultConfig {
+        missingDimensionStrategy 'react-native-camera', 'mlkit'
+    }
+}
+
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

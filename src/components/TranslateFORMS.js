@@ -7,15 +7,17 @@ import {
   Text,
   TextInput,
   View,
-  StyleSheet,
   ToastAndroid,
   ScrollView,
   Pressable,
   Modal,
+  StyleSheet,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
+import Toast from 'react-native-simple-toast';
 
 //
 // --------------------- REDUX SETUP ---------------------
@@ -69,14 +71,29 @@ const TranslateFORMS = () => {
     }
   };
 
-  // const [SOURCE_TEXT, setSOURCE_TEXT] = useState('');
-  // const [TARGET_TEXT, setTARGET_TEXT] = useState('');
-
   const [MODAL_VISIBILITY, set_MODAL_VISIBILITY] = useState(false);
   const [MODAL_TIME_OUT, set_MODAL_TIME_OUT] = useState(3000);
 
   const [MODAL_X, set_MODAL_X] = useState(0);
   const [MODAL_Y, set_MODAL_Y] = useState(0);
+
+  const [constainer_style, set_constainer_style] = useState(12);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      console.log('Keyboard Shown');
+      set_constainer_style(3);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      console.log('Keyboard Hidden');
+      set_constainer_style(12);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const scrollRef = useRef();
 
@@ -86,6 +103,8 @@ const TranslateFORMS = () => {
       console.log(SourceText);
       if (SourceText !== '') {
         FetchToTranslate(SourceText);
+      } else {
+        translateDispatch(setTargetText(''));
       }
     }, 1000);
 
@@ -102,7 +121,6 @@ const TranslateFORMS = () => {
       });
       const response = await fetch(
         'http://' + NETWORK.IP + ':' + NETWORK.PORT + '/api/translate/',
-        // NETWORK.ADRESS + '/api/translate/',
         {
           method: 'post',
           body: translateData,
@@ -120,7 +138,7 @@ const TranslateFORMS = () => {
   };
 
   const ChangeTargetInputText = async text => {
-    if (text === '') {
+    if (text === '' || text === '\n') {
       translateDispatch(setTargetText(''));
     }
 
@@ -142,7 +160,7 @@ const TranslateFORMS = () => {
 
   return (
     <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
-      {/* <Modal
+      <Modal
         animationType="fade"
         transparent={true}
         visible={MODAL_VISIBILITY}
@@ -156,7 +174,7 @@ const TranslateFORMS = () => {
               onPress={() => {
                 set_MODAL_TIME_OUT(3000);
                 Clipboard.setString(TargetText);
-                ToastAndroid.show('Copied', ToastAndroid.SHORT);
+                Toast.show('Copied');
               }}>
               <View style={styles.saved}>
                 <COPY_ICO />
@@ -165,7 +183,7 @@ const TranslateFORMS = () => {
             <TouchableOpacity
               onPress={() => {
                 set_MODAL_TIME_OUT(3000);
-                ToastAndroid.show('speaker', ToastAndroid.SHORT);
+                Toast.show('speaker');
               }}>
               <View style={styles.saved}>
                 <SPEAKER_ICO />
@@ -174,7 +192,7 @@ const TranslateFORMS = () => {
             <TouchableOpacity
               onPress={() => {
                 set_MODAL_TIME_OUT(3000);
-                ToastAndroid.show('saved', ToastAndroid.SHORT);
+                Toast.show('saved');
               }}>
               <View style={styles.saved}>
                 <SAVED_ICO />
@@ -182,26 +200,32 @@ const TranslateFORMS = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal> */}
-      <View style={styles.externalContainer}>
-        <View style={styles.internalContainer}>
+      </Modal>
+      <View style={[styles.externalContainer, {flex: constainer_style}]}>
+        <View style={[styles.internalContainer, {flex: constainer_style}]}>
           <TextInput
             multiline={true}
+            textAlign={'center'}
             keyboardType="default"
+            onSubmitEditing={Keyboard.dismiss}
+            blurOnSubmit={true}
             value={SourceText}
             style={styles.internalInputText}
             onChangeText={e => ChangeTargetInputText(e)}
             placeholder={DEFAULT_TEXT.INPUT_TEXT}
             selectionColor={COLOR.ActiveText}
             maxLength={DEFAULT_TEXT.MAX_LENGTH}
-            textAlign={'center'}
           />
         </View>
       </View>
       <View
-        style={[styles.externalContainer, {marginBottom: SCREEN.HEIGHT / 60}]}>
+        style={[
+          styles.externalContainer,
+          {marginBottom: SCREEN.HEIGHT / 60},
+          {flex: constainer_style},
+        ]}>
         <Pressable
-          style={styles.internalContainer}
+          style={[styles.internalContainer, {flex: constainer_style}]}
           onLongPress={evt => (TargetText === '' ? {} : ShowModal(evt))}>
           <ScrollView
             ref={scrollRef}
@@ -217,6 +241,9 @@ const TranslateFORMS = () => {
   );
 };
 
+const keyboard_styles = StyleSheet.create({
+  externalContainer: {},
+});
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
@@ -224,7 +251,7 @@ const styles = StyleSheet.create({
   },
   externalContainer: {
     // rectangle setup
-    flex: 12,
+    //flex: 12,
     backgroundColor: COLOR.ExternalColor,
     borderRadius: 20,
 
@@ -232,7 +259,7 @@ const styles = StyleSheet.create({
   },
   internalContainer: {
     // rectangle setup
-    flex: 12,
+    //flex: 12,
     backgroundColor: COLOR.InternalColor,
     borderRadius: 20,
     margin: 10,
@@ -241,7 +268,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   internalInputText: {
-    flex: 12,
     width: SCREEN.WIDTH - 30,
     color: COLOR.ActiveText,
     fontFamily: 'SFUIText-Semibold',
@@ -254,7 +280,7 @@ const styles = StyleSheet.create({
   },
   modalCentered: {
     justifyContent: 'center',
-    alignItems: 'cenr',
+    alignItems: 'center',
     width: ((SCREEN.WIDTH - 40) / 5) * 3 + 20,
   },
   modalContainer: {

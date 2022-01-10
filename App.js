@@ -1,24 +1,18 @@
-import React, {useState, useCallback} from 'react';
-import {
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-  LogBox,
-  Dimensions,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StatusBar, StyleSheet, View, LogBox, Dimensions} from 'react-native';
 
 import {Provider} from 'react-redux';
 import {Store} from './src/context/store/Store';
 
 import {useNetInfo} from '@react-native-community/netinfo';
-import SplashScreen from 'react-native-splash-screen';
 
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
+
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
 import {NavigationContainer} from '@react-navigation/native';
 
 import 'react-native-gesture-handler';
@@ -46,6 +40,7 @@ LogBox.ignoreLogs(['Reanimated 2']);
 // ------------------------------
 
 const HomeScreen = ({navigation}) => {
+  console.log('YOU IN PORTRAIT');
   return (
     <View style={styles.mainContainer}>
       <StatusBar
@@ -53,6 +48,7 @@ const HomeScreen = ({navigation}) => {
         backgroundColor={'transparent'}
         barStyle={'light-content'}
       />
+      <View style={{height: StatusBar.currentHeight}} />
       <SafeAreaView style={{flex: 1}}>
         <Header navigation={navigation} />
         <TranslateFORMS />
@@ -62,24 +58,19 @@ const HomeScreen = ({navigation}) => {
 };
 
 const HomeScreenLandscape = ({navigation}) => {
-  console.log('HomeScreenLandscape');
+  console.log('YOU IN LANSCAPE');
   return <HomeLandscape navigation={navigation} />;
 };
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   const netInfo = useNetInfo();
 
   const [ORIENTATION, set_ORIENTATION] = useState('Portrait');
 
-  const dim = Dimensions.get('screen');
-
   Dimensions.addEventListener('change', () => {
-    console.log(`2 --> ${ORIENTATION}`);
-    console.log('In event listener');
-    //SCREEN.isLandscape()
-    if (dim.width < dim.height) {
+    if (SCREEN.isPortrait()) {
       console.log('Portrait');
       set_ORIENTATION('Portrait');
     } else {
@@ -92,7 +83,6 @@ const App = () => {
 
   if (netInfo.isConnected) {
     changeNavigationBarColor(COLOR.ActiveText);
-    console.log(ORIENTATION);
     return (
       <Provider store={Store}>
         <NavigationContainer>

@@ -11,10 +11,7 @@ import {
   BackHandler,
 } from 'react-native';
 
-import changeNavigationBarColor, {
-  hideNavigationBar,
-  showNavigationBar,
-} from 'react-native-navigation-bar-color';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 import {CommonActions} from '@react-navigation/native';
 
@@ -52,12 +49,14 @@ const takePicture = async (camera, cameraDispatch) => {
 const BottomMenu = ({navigation}) => {
   useEffect(() => {
     const backAction = () => {
+      console.log(`CAMERA USE EFFECT --> ${CameraState}`);
       cameraDispatch(setCameraState('on'));
       navigation.navigate('HomeScreen');
       changeNavigationBarColor(COLOR.ActiveText);
       setTimeout(() => {
         cameraDispatch(setCameraState('off'));
-      }, 1000);
+        console.log(`CAMERA USE EFFECT TIMEOUT --> ${CameraState}`);
+      }, 2000);
       return true;
     };
 
@@ -84,12 +83,14 @@ const BottomMenu = ({navigation}) => {
       <TouchableOpacity
         onPress={() => {
           if (!PictureIsTaked) {
+            console.log(`PICTURE IS NOT TAKED --> ${CameraState}`);
             cameraDispatch(setCameraState('on'));
             navigation.navigate('HomeScreen');
             changeNavigationBarColor(COLOR.ActiveText);
             setTimeout(() => {
               cameraDispatch(setCameraState('off'));
-            }, 1000);
+              console.log(`PICTURE IS NOT TAKED TIMEOUT --> ${CameraState}`);
+            }, 2000);
           }
           cameraDispatch(setPictureIsTaked(false));
         }}

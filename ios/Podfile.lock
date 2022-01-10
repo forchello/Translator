@@ -72,7 +72,62 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
+  - GoogleDataTransport (9.1.2):
+    - GoogleUtilities/Environment (~> 7.2)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleMLKit/FaceDetection (2.5.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitFaceDetection (~> 1.5.0)
+  - GoogleMLKit/MLKitCore (2.5.0):
+    - MLKitCommon (~> 5.0.0)
+  - GoogleToolboxForMac/DebugUtils (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - GoogleToolboxForMac/Defines (2.3.2)
+  - GoogleToolboxForMac/Logger (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - "GoogleToolboxForMac/NSData+zlib (2.3.2)":
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.3.2)":
+    - GoogleToolboxForMac/DebugUtils (= 2.3.2)
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.3.2)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.3.2)"
+  - GoogleUtilities/Environment (7.7.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.7.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/UserDefaults (7.7.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilitiesComponents (1.1.0):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.7.0)
   - libevent (2.1.12)
+  - MLImage (1.0.0-beta2)
+  - MLKitCommon (5.0.0):
+    - GoogleDataTransport (~> 9.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - GoogleUtilities/UserDefaults (~> 7.0)
+    - GoogleUtilitiesComponents (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+    - Protobuf (~> 3.12)
+  - MLKitFaceDetection (1.5.0):
+    - MLKitCommon (~> 5.0)
+    - MLKitVision (~> 3.0)
+  - MLKitVision (3.0.0):
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GTMSessionFetcher/Core (~> 1.1)
+    - MLImage (= 1.0.0-beta2)
+    - MLKitCommon (~> 5.0)
+    - Protobuf (~> 3.12)
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
   - OpenSSL-Universal (1.1.180)
   - Permission-AppTrackingTransparency (3.2.0):
     - RNPermissions
@@ -112,6 +167,8 @@ PODS:
     - RNPermissions
   - Permission-StoreKit (3.2.0):
     - RNPermissions
+  - PromisesObjC (2.0.0)
+  - Protobuf (3.19.1)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -314,6 +371,11 @@ PODS:
     - React-Core
     - react-native-camera/RCT (= 4.2.1)
     - react-native-camera/RN (= 4.2.1)
+  - react-native-camera/FaceDetectorMLKit (4.2.1):
+    - GoogleMLKit/FaceDetection
+    - React-Core
+    - react-native-camera/RCT
+    - react-native-camera/RN
   - react-native-camera/RCT (4.2.1):
     - React-Core
   - react-native-camera/RN (4.2.1):
@@ -322,6 +384,9 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
+  - react-native-simple-toast (1.1.3):
+    - React-Core
+    - Toast (~> 4.0.0)
   - react-native-splash-screen (3.2.0):
     - React
   - react-native-voice (3.1.5):
@@ -402,6 +467,7 @@ PODS:
     - React-RCTImage
   - RNSVG (9.12.0):
     - React
+  - Toast (4.0.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -467,8 +533,10 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-camera/FaceDetectorMLKit (from `../node_modules/react-native-camera`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - "react-native-voice (from `../node_modules/@react-native-voice/voice`)"
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -503,8 +571,22 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
+    - GoogleDataTransport
+    - GoogleMLKit
+    - GoogleToolboxForMac
+    - GoogleUtilities
+    - GoogleUtilitiesComponents
+    - GTMSessionFetcher
     - libevent
+    - MLImage
+    - MLKitCommon
+    - MLKitFaceDetection
+    - MLKitVision
+    - nanopb
     - OpenSSL-Universal
+    - PromisesObjC
+    - Protobuf
+    - Toast
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -586,6 +668,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-simple-toast:
+    :path: "../node_modules/react-native-simple-toast"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   react-native-voice:
@@ -644,7 +728,18 @@ SPEC CHECKSUMS:
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
+  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  GoogleMLKit: 0d7f5aa2f8a2f2ea9d849a05abdbe80974b0ec83
+  GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
+  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
+  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  MLImage: a454f9f8ecfd537783a12f9488f5be1a68820829
+  MLKitCommon: 3bc17c6f7d25ce3660f030350b46ae7ec9ebca6e
+  MLKitFaceDetection: 617cb847441868a8bfd4b48d751c9b33c1104948
+  MLKitVision: e87dc3f2e456a6ab32361ebd985e078dd2746143
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   Permission-AppTrackingTransparency: 95c9308dd40819fa9f6830751d0ef3ea11498723
   Permission-BluetoothPeripheral: dd2663f81d622c9d153a2aacd7e3de0d59f7b4b6
@@ -665,6 +760,8 @@ SPEC CHECKSUMS:
   Permission-Siri: 1495cb9b2059d11ac5a08c92ba38db7593fdddc1
   Permission-SpeechRecognition: bfb038564b6f3a6e5dcf8d848171c32ae09d949c
   Permission-StoreKit: ee68e7b70e9c44c2b16c6add64ddc58bd54c81c6
+  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  Protobuf: 3724efa50cb2846d7ccebc8691c574e85fd74471
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
   RCTTypeSafety: c475a7059eb77935fa53d2c17db299893f057d5d
@@ -680,6 +777,7 @@ SPEC CHECKSUMS:
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-netinfo: 92e6e4476eb8bf6fc2d7c0a6ca0a1406f663d73a
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
+  react-native-simple-toast: bf002828cf816775a6809f7a9ec3907509bce11f
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-voice: 2b4ee948775b528dc450220406ee38c57c91b590
   React-perflogger: 93075d8931c32cd1fce8a98c15d2d5ccc4d891bd
@@ -699,9 +797,10 @@ SPEC CHECKSUMS:
   RNPermissions: f7ebe52db07c00901127966ca080b4ec6a6ceb0a
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
   RNSVG: 75670614bca635d3dd64bc267bc199e539cb4fa9
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 26c8f0741a0bca24110091823cb195c383e0f6e7
+PODFILE CHECKSUM: 5c263ecb233ae55a684d50e5b0fd34fb75873306
 
 COCOAPODS: 1.11.2
