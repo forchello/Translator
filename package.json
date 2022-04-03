@@ -24,7 +24,7 @@
     "@types/invariant": "^2.2.35",
     "@types/react-native": "^0.65.5",
     "child_process": "^1.0.2",
-    "electron": "^15.3.0",
+    "electron": "^15.3.5",
     "eslint-plugin-react-hooks": "^4.2.1-alpha-5ca4b0433-20211020",
     "free-translate": "^0.1.1",
     "install": "^0.13.0",
